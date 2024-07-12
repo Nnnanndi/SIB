@@ -1,0 +1,20 @@
+---
+title: "SIB"
+description: SIB course Quarto exercise 01
+format: html
+date: 12 July 2024
+author: Nandi Joubert
+---
+
+## Introduction
+
+In this project we aim to visualize the trends of the most frequently used baby names from 1880 to 2017 in the United States. We do this by:
+
+- Understanding the different columns of the data set
+- Find the top 10 most frequently used baby names in the data for:
+   - girls
+   - boys
+- Plot the yearly trend of the top 10 baby names 
+
+![](pics/baby_feet.jpg){fig-align="centre" width=400}
+

@@ -1,0 +1,87 @@
+---
+title: "Analysis"
+---
+
+### Packages required
+
+```{r}
+#| output: false
+library(babynames)
+library(knitr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(pheatmap)
+```
+
+### Initial view of the dataset
+
+View the beginning of the babynames dataset
+
+```{r}
+#| label: tbl-1-head-ds
+#| fig-cap: "Table 1: First 6 data points in the babyname dataset"
+head(babynames) |> kable()
+```
+
+### Functions required
+
+Custom functions to get the most frequent baby names over time from the dataset.
+Expand to see the code of the functions below.
+
+```{r}
+#| code-fold: true
+get_most_frequent <- function(babynames, select_sex, from = 1950) {
+  most_freq <- babynames |>
+    filter(sex == select_sex, year > from) |>
+    group_by(name) |>
+    summarise(average = mean(prop)) |>
+    arrange(desc(average))
+    
+  return(list(
+    babynames = babynames,
+    most_frequent = most_freq,
+    sex = select_sex,
+    from = from))
+}
+
+#| code-fold: true
+plot_top <- function(x, top = 10) {
+  topx <- x$most_frequent$name[1:top]
+  
+  p <- x$babynames |>
+    filter(name %in% topx, sex == x$sex, year > x$from) |>
+    ggplot(aes(x = year, y = prop, color = name)) +
+    geom_line() +
+    scale_color_brewer(palette = "Paired") +
+    theme_classic()
+  
+  return(p)
+}
+```
+
+### Vizulisations
+
+The following code is used to display the 10 most popular names for girls in a line graph.
+
+```{r}
+#| label: fig-line-girls
+#| fig-cap: "Line plot displaying proportion of 10 most popular names for girls by year"
+get_most_frequent(babynames, select_sex = "F") |>
+  plot_top()
+```
+
+@fig-line-girls shows a decline in all popular girls names from 2000 to 2020.
+
+The following code is used to display the 10 most popular names for boys in a line graph.
+
+```{r}
+#| label: fig-line-boys
+#| fig-cap: "Line plot displaying proportion of 10 most popular names for boys by year"
+get_most_frequent(babynames, select_sex = "M") |>
+  plot_top()
+```
+
+@fig-line-boys shows a decline in all popular boys names from 2000 to 2020.
+
+------------------------------------------------------------------------
